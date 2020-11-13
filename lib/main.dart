@@ -9,74 +9,147 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Home'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.blueGrey,
+          // This makes the visual density adapt to the platform that you run
+          // the app on. For desktop platforms, the controls will be smaller and
+          // closer together (more dense) than on mobile platforms.
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: Home());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+// home screen
+class Home extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeState createState() => new _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomeState extends State<Home> {
+  var todo = <String>[
+    'todo 1',
+    'todo 2',
+    'todo 3',
+    'todo 4',
+    'todo 5',
+  ];
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  final myEdtController = TextEditingController();
+
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myEdtController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(title: Text('Home')),
-      body: Center(
-          child: Text(
-        'Hello World',
-      )),
-    );
+    return (Scaffold(
+        appBar: AppBar(
+          title: Text('Home Page'),
+        ),
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              //------------------------------ add to do container------------------------------------
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                        left: 10.0, right: 10.0, top: 20, bottom: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            flex: 5,
+                            child: TextField(
+                              decoration:
+                                  InputDecoration(hintText: 'Enter the To Do'),
+                              style: TextStyle(fontSize: 18.0),
+                              controller: myEdtController,
+                            )),
+
+                        //------------------ add to do button ---------------------------------------------
+                        Expanded(
+                            flex: 1,
+                            child: IconButton(
+                                icon: Icon(
+                                  Icons.add_circle_outline,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    todo.add(myEdtController.text);
+                                    myEdtController.clear();
+                                  });
+                                }))
+                      ],
+                    ),
+                  )),
+
+              // ---------------------------list to do ----------------------------------------------
+              Expanded(
+                  flex: 7,
+                  child: ListView.builder(
+                      padding: EdgeInsets.all(10.0),
+                      itemCount: todo.length,
+                      itemBuilder: (context, index) {
+                        return TodoItem(todo[index], index);
+                      }))
+            ],
+          ),
+        )));
+  }
+
+  // --------------------todo Item------------------------------------------------
+  Widget TodoItem(String title, int index) {
+    return Container(
+        padding:
+            EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+        margin: EdgeInsets.only(left: 0.0, right: 0.0, top: 0.0, bottom: 10.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Color.fromRGBO(0, 0, 0, 1), width: 2),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+                flex: 5,
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.bold),
+                )),
+            // --------------------- item edit button -----------------------------
+            Expanded(
+              flex: 1,
+              child: IconButton(
+                  icon: Icon(Icons.edit),
+                  // ------------- on press edut btn ----------------------
+                  onPressed: null),
+            ),
+            // -----------------------item delete button ----------------------------
+            Expanded(
+                flex: 1,
+                child: IconButton(
+                    icon: Icon(Icons.delete),
+                    // ---------- on press delete btn --------
+                    onPressed: () {
+                      setState(() {
+                        todo.removeAt(index);
+                      });
+                    }))
+          ],
+        ));
   }
 }
