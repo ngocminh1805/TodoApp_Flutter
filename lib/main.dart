@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'images.dart';
 import 'home.dart';
 import 'news.dart';
 
@@ -39,7 +40,7 @@ class Main extends StatefulWidget {
 
 class _MainState extends State<Main> {
   int currentIndex = 0;
-  final tabs = [Home(), News()];
+  final tabs = [Home(), News(), Images()];
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +50,8 @@ class _MainState extends State<Main> {
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
-          // backgroundColor: colorScheme.surface,
-          // selectedItemColor: colorScheme.onSurface,
+          backgroundColor: Colors.blueGrey,
+          selectedItemColor: Colors.white,
           // unselectedItemColor: colorScheme.onSurface.withOpacity(.60),
           // selectedLabelStyle: textTheme.caption,
           // unselectedLabelStyle: textTheme.caption,
@@ -62,7 +63,9 @@ class _MainState extends State<Main> {
             BottomNavigationBarItem(
                 title: Text("Home"), icon: Icon(Icons.home)),
             BottomNavigationBarItem(
-                title: Text("News"), icon: Icon(Icons.photo_album))
+                title: Text("News"), icon: Icon(Icons.photo_album)),
+            BottomNavigationBarItem(
+                title: Text("Images"), icon: Icon(Icons.image))
           ]),
     );
   }

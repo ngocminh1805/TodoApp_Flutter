@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class News extends StatefulWidget {
+class Images extends StatefulWidget {
   @override
-  _NewsState createState() => new _NewsState();
+  _ImagesState createState() => new _ImagesState();
 }
 
-class _NewsState extends State<News> {
+class _ImagesState extends State<Images> {
   var image = <ApiImage>[];
   int page = 0;
 
@@ -35,7 +35,7 @@ class _NewsState extends State<News> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("News Page"),
+          title: Text("Images Page"),
         ),
         body: Container(
           child: Column(
@@ -54,7 +54,7 @@ class _NewsState extends State<News> {
                     padding: EdgeInsets.all(8),
                     width: 300,
                     child: RaisedButton(
-                        child: Text("get data"), onPressed: () => getData())),
+                        child: Text("get images"), onPressed: () => getData())),
               )
             ],
           ),
@@ -66,44 +66,16 @@ class _NewsState extends State<News> {
 
 Widget ImageItem(ApiImage img, int index) {
   return Container(
-      height: 100,
+      height: 300,
+      width: 600,
       padding: EdgeInsets.all(10.0),
       margin: EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10),
       decoration: BoxDecoration(
         border: Border.all(color: Color.fromRGBO(0, 0, 0, 1), width: 2),
         borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-              flex: 5,
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      index.toString(),
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    )),
-                    Expanded(
-                        child: Text(
-                      img.author,
-                      style: TextStyle(fontSize: 10, color: Colors.green),
-                    )),
-                    Expanded(child: Text(img.url))
-                  ],
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Image(
-                image: NetworkImage(Url(img.download_url, img.id)),
-                height: 100,
-                width: 100,
-              ))
-        ],
+      child: Image(
+        image: NetworkImage(img.download_url),
       ));
 }
 
@@ -113,15 +85,6 @@ String Url(String url, String id) {
   str = str + id + "/200";
   return str;
 }
-
-// fecth api response
-// Futuvore<ApiImage> fetchApiImage() async {
-// Future<List<ApiImage>> fetchApiImage() async {
-//   final response = await http.get('https://picsum.photos/v2/list');
-//   print('RESPONSE from API: ' + response.body);
-
-//    return ApiImage.fromJson(jsonDecode(response.body));
-// }
 
 // ------------------------------------define Class Api-------------------------------------------
 class ApiImage {
